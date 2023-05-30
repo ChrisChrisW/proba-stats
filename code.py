@@ -309,6 +309,9 @@ def descriptive_statistics_menu():
     messagebox.showinfo("Statistiques : Statistique descriptive", message)
 
 def inferential_statistics_menu():
+    """
+    Affiche le menu des statistiques inférentielles et exécute l'action sélectionnée par l'utilisateur.
+    """
     try:
         probability_file_path = "notesproba.txt"
         statistics_file_path = "notestat.txt"
