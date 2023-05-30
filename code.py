@@ -419,19 +419,19 @@ def generate_gui():
     button_frame = tk.Frame(root)
     button_frame.pack(pady=20)
 
-    solve_button = tk.Button(button_frame, text="Probabilité", command=solve_quadratic_equation_probability)
+    solve_button = tk.Button(button_frame, text="Résoudre une équation du second degré", command=solve_quadratic_equation_probability)
     solve_button.pack(side=tk.LEFT, padx=10)
 
-    integral_button = tk.Button(button_frame, text="Probabilité", command=calculate_integral_probability)
+    integral_button = tk.Button(button_frame, text="Calculer une intégrale", command=calculate_integral_probability)
     integral_button.pack(side=tk.LEFT, padx=10)
 
     statistics_frame = tk.Frame(root)
     statistics_frame.pack(pady=20)
 
-    descriptive_button = tk.Button(statistics_frame, text="Statistiques", command=descriptive_statistics_menu)
+    descriptive_button = tk.Button(statistics_frame, text="Statistique descriptive", command=descriptive_statistics_menu)
     descriptive_button.pack(side=tk.LEFT, padx=10)
 
-    inferential_button = tk.Button(statistics_frame, text="Statistiques", command=inferential_statistics_menu)
+    inferential_button = tk.Button(statistics_frame, text="Statistique inférentielle", command=inferential_statistics_menu)
     inferential_button.pack(side=tk.LEFT, padx=10)
 
     quit_button = tk.Button(root, text="Quitter", command=root.quit)
