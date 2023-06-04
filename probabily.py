@@ -106,7 +106,7 @@ def equation_second_degre():
             user_solution_2 = simpledialog.askstring("Question", f"L'équation : {a}x^2 + {b}x + {c} = 0\nLe discriminant (delta) est : {delta}\nTon x1={user_solution_1}\nSolution 2 :")
 
             # Vérifier les solutions fournies par l'utilisateur
-            if user_solution_1 == convert_to_fraction(solution_1) and user_solution_2 == convert_to_fraction(solution_2):
+            if (user_solution_1 == convert_to_fraction(solution_1) and user_solution_2 == convert_to_fraction(solution_2)) or (user_solution_1 == convert_to_fraction(solution_2) and user_solution_2 == convert_to_fraction(solution_1)) :
                 messagebox.showinfo("Bonne réponse", "Bonne réponse ! L'équation admet deux solutions :"
                                     f"x1 = {convert_to_fraction(solution_1)}"
                                     f"\nx2 = {convert_to_fraction(solution_2)}")
