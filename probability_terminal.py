@@ -6,7 +6,12 @@ from fractions import Fraction
 from utils.printer import *
 from utils.constant import *
 from utils.parameters import *
-from utils.maths_func import format_fraction, convert_to_fraction
+from utils.maths_func import (
+    is_decimal,
+    multiply_fraction_by_denominator,
+    format_fraction,
+    convert_to_fraction,
+)
 
 
 def equation_second_degre():
@@ -346,6 +351,8 @@ def generate_equation_second_degre():
     a = 1
 
     if delta > 0:
+        print_blue("delta > 0")
+
         cas_choice = random.choices(
             ["3.1", "3.2"], weights=[p_equation_delta_sup_3_1, p_equation_delta_sup_3_2]
         )[0]
@@ -382,24 +389,37 @@ def generate_equation_second_degre():
             b = h
             c = Fraction(((h**2) - p * (e**2)) / l)
 
-        print(
-            "Calculez a, b et c en sachant que delta={}, x1={} et x2={}: ".format(
-                delta, x1, x2
-            )
+        # variables de tempo pour afficher les variables sous forme d'entier dans la console
+        tmp_a, tmp_b, tmp_c = a, b, c
+
+        # multiplier par le dénominateur pour enlever la fraction a A
+        if is_decimal(tmp_a):
+            denominator_a = multiply_fraction_by_denominator(tmp_a)
+            tmp_a = tmp_a * denominator_a
+            tmp_b = tmp_b * denominator_a
+            tmp_c = tmp_c * denominator_a
+
+        # multiplier par le dénominateur pour enlever la fraction a B
+        if is_decimal(tmp_b):
+            denominator_b = multiply_fraction_by_denominator(tmp_b)
+            tmp_a = tmp_a * denominator_b
+            tmp_b = tmp_b * denominator_b
+            tmp_c = tmp_c * denominator_b
+
+        # multiplier par le dénominateur pour enlever la fraction a C
+        if is_decimal(tmp_c):
+            denominator_c = multiply_fraction_by_denominator(tmp_c)
+            tmp_a = tmp_a * denominator_c
+            tmp_b = tmp_b * denominator_c
+            tmp_c = tmp_c * denominator_c
+
+        print_green(
+            f"Pour un delta > 0, delta={delta} et (x1, x2)=({x1},{x2}), on a une equation {tmp_a}x² {['+' if tmp_b>0 else '-'] + tmp_b}x {['+' if tmp_c>0 else '-'] + tmp_c} avec a={a}, b={b} et c={c}"
         )
 
-        user_a = Fraction(input("Insérer la valeur de a = "))
-        user_b = Fraction(input("Insérer la valeur de b = "))
-        user_c = Fraction(input("Insérer la valeur de c = "))
-
-        # TODO :
-        if (a == user_a) and (b == user_b) and (c == user_c):
-            print("bien")
-        else:
-            print("pas bien")
-
+        return a, b, c, delta, x1, x2
     elif delta == 0:
-        print("delta = 0")
+        print_blue("delta = 0")
 
         # probabilité X=1 et Z!=1 mais il ne peux pas être égal à 0 non plus
         X = random.choices(
@@ -414,25 +434,60 @@ def generate_equation_second_degre():
         b = -2 * x0
         c = a * (x0**2)
 
-        user_a = Fraction(input("Insérer la valeur de a = "))
-        user_b = Fraction(input("Insérer la valeur de b = "))
-        user_c = Fraction(input("Insérer la valeur de c = "))
+        # variables de tempo pour afficher les variables sous forme d'entier dans la console
+        tmp_b, tmp_c = b, c
 
-        # TODO :
-        if (a == user_a) and (b == user_b) and (c == user_c):
-            print("bien")
-        else:
-            print("pas bien")
+        # multiplier par le dénominateur pour enlever la fraction a B
+        if is_decimal(tmp_b):
+            denominator_b = multiply_fraction_by_denominator(tmp_b)
+            tmp_a = tmp_a * denominator_b
+            tmp_b = tmp_b * denominator_b
+            tmp_c = tmp_c * denominator_b
+
+        # multiplier par le dénominateur pour enlever la fraction a C
+        if is_decimal(tmp_c):
+            denominator_c = multiply_fraction_by_denominator(tmp_c)
+            tmp_a = tmp_a * denominator_c
+            tmp_b = tmp_b * denominator_c
+            tmp_c = tmp_c * denominator_c
+
+        print_green(
+            f"Pour un delta = 0, delta={delta} et x0={x0}, on a une equation x² {['+' if tmp_b>0 else '-'] + tmp_b}x {['+' if tmp_c>0 else '-'] + tmp_c} avec a={a}, b={b} et c={c}"
+        )
+
+        return a, b, c, delta, x0
 
     else:
-        print("delta < 0")
+        print_blue("delta < 0")
 
-        a = format_fraction(choose_parameter_positive_only())
+        # il faut que a appartient a E exclue 0 pour éviter un problème de calcul sur c
+        a = format_fraction(choose_parameter_excluding(0))
         b = format_fraction(random.choice(A))
 
         c = ((b**2) + e) / (4 * a)
 
-        # check
+        # variables de tempo pour afficher les variables sous forme d'entier dans la console
+        tmp_a, tmp_b, tmp_c = a, b, c
+
+        # multiplier par le dénominateur pour enlever la fraction a A
+        if is_decimal(tmp_a):
+            denominator_a = multiply_fraction_by_denominator(tmp_a)
+            tmp_a = tmp_a * denominator_a
+            tmp_b = tmp_b * denominator_a
+            tmp_c = tmp_c * denominator_a
+
+        # multiplier par le dénominateur pour enlever la fraction a C
+        if is_decimal(tmp_c):
+            denominator_c = multiply_fraction_by_denominator(tmp_c)
+            tmp_a = tmp_a * denominator_c
+            tmp_b = tmp_b * denominator_c
+            tmp_c = tmp_c * denominator_c
+
+        print_green(
+            f"Pour un delta < 0, delta={delta}, on a une equation {['' if tmp_a>0 else '-'] + tmp_a}x² {['+' if tmp_b>0 else '-'] + tmp_b}x {['+' if tmp_c>0 else '-'] + tmp_c} avec a={a}, b={b} et c={c}"
+        )
+
+        return a, b, c, delta
 
 
 def main():
