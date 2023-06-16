@@ -129,18 +129,25 @@ def equation_second_degre():
             print(
                 f"Donnez les solutions de l'équation (sous forme de fraction) : ({2*point_gagne}pt)"
             )
-            # TODO : donner quand même un point si bon
+
             user_solution_1 = input(f"La solution 1 est ({point_gagne}pt) \n")
-            user_solution_2 = input(f"La solution 2 est ({point_gagne}pt) \n")
             print()
 
             # Vérifier les solutions fournies par l'utilisateur
-            if user_solution_1 == convert_to_fraction(
-                solution_1
-            ) and user_solution_2 == convert_to_fraction(solution_2):
-                print_green(
-                    f"Bonne réponse ! Tu as obtenu {point_gagne}pt, l'équation admet deux solutions :"
-                )
+            if (user_solution_1 == convert_to_fraction(solution_1)) or (
+                user_solution_1 == convert_to_fraction(solution_2)
+            ):
+                print_green(f"Bonne réponse ! Tu as obtenu le premier {point_gagne}pt")
+
+                user_solution_2 = input(f"La solution 2 est ({point_gagne}pt) \n")
+
+                if user_solution_1 != user_solution_2 and (
+                    (user_solution_2 == convert_to_fraction(solution_1))
+                    or (user_solution_2 == convert_to_fraction(solution_2))
+                ):
+                    print_green(
+                        f"Bonne réponse ! Tu as obtenu {point_gagne}pt, l'équation admet deux solutions :"
+                    )
             else:
                 print_red("Mauvaise réponse. Les solutions sont :")
 
