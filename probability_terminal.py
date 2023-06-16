@@ -491,6 +491,13 @@ def generate_equation_second_degre():
 
 
 def main():
+    # TODO : créer un timer et afficher le temps pour chaque question
+
+    # TODO : générateur de 2nd degré (ensuite) correction du 2nd degré
+    # TODO : question : que vaut le disciminant (delta) de l'équation ? (0.5pts)
+    # TODO : question : quel est le nombre de solutions de l'équation ? (0.5pts)
+    # TODO : question : rentrer les solutions trouvés ? (une solution = 0.5pts)
+
     print_new_line()
 
     # Nombre de questions à générer
