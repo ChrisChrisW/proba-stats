@@ -2,6 +2,7 @@ import random
 
 from utils.constant import A
 
+
 def choose_parameter_excluding(excluded_values):
     """
     Fonction qui choisit un paramètre aléatoire parmi une liste de valeurs possibles, en excluant certaines valeurs.
@@ -18,6 +19,7 @@ def choose_parameter_excluding(excluded_values):
         valid_values = [x for x in A if x != excluded_values]
     return random.choice(valid_values)
 
+
 def choose_parameter_positive_only():
     """
     Fonction qui choisit un paramètre aléatoire parmi une liste de valeurs possibles, en ne sélectionnant que des valeurs positives.
@@ -26,4 +28,15 @@ def choose_parameter_positive_only():
         float: Le paramètre choisi.
     """
     valid_values = [x for x in A if x > 0]
+    return random.choice(valid_values)
+
+
+def choose_parameter_negative_only():
+    """
+    Fonction qui choisit un paramètre aléatoire parmi une liste de valeurs possibles, en ne sélectionnant que des valeurs négatives.
+
+    Returns:
+        float: Le paramètre choisi.
+    """
+    valid_values = [x for x in A if x < 0]
     return random.choice(valid_values)

@@ -4,9 +4,17 @@ from utils.maths_func import repartition_valeurs
 # A = −9 : 1 : 9 = {−9, . . . , −1, 0, 1, . . . , 9}.
 A = np.arange(-9, 9, 1).tolist()
 
+# point accordés
+point_gagne = 0.5
+
 # Probabilités des deux thèmes
 p_equation = 1
 p_integration = 0
+
+# Probabilité des différents types  1 : delta < 0 | 2 : delta = 0 | 3 : delta > 0
+p_type_1 = 1 / 5
+p_type_2 = 2 / 5
+p_type_3 = 2 / 5
 
 # Probabilité lorsque delta > 0 pour les deux cas
 p_equation_delta_sup_3_1 = 1 / 2
