@@ -25,15 +25,6 @@ def equation_second_degre():
     """
     points = 0
 
-    # # Générer les valeurs aléatoires pour les paramètres a, b, c
-    # # Vérification si les paramètres a, b, c peuvent être mis sous forme de fraction
-    # a = format_fraction(random.choice(A))
-    # b = format_fraction(random.choice(A))
-    # c = format_fraction(random.choice(A))
-
-    # # Calcul du discriminant
-    # delta = b**2 - 4 * a * c
-
     # Générer l'équation du 2nd degré
     result = generate_equation_second_degre()
 
@@ -70,13 +61,10 @@ def equation_second_degre():
         if delta < 0:
             print_red("L'équation n'admet pas de solution.")
         elif delta == 0:
-            # solution_1 = -b / (2 * a)
             print_red(
                 f"L'équation admet une unique solution : x = {convert_to_fraction(solution_1)}"
             )
         else:
-            # solution_1 = (-b - delta**0.5) / (2 * a)
-            # solution_2 = (-b + delta**0.5) / (2 * a)
             print_red("L'équation admet deux solutions :")
             print_red(f"x1 = {convert_to_fraction(solution_1)}")
             print_red(f"x2 = {convert_to_fraction(solution_2)}")
@@ -110,7 +98,6 @@ def equation_second_degre():
         expected_num_solutions = "1"
         if num_solutions == expected_num_solutions:
             points += point_gagne
-            # solution_1 = -b / (2 * a)
             print_green(f"Bonne réponse ! Tu as obtenu {point_gagne}pt !\n")
             # Demander la solution si l'équation admet une unique solution
             user_solution = input(
@@ -132,23 +119,17 @@ def equation_second_degre():
             print_red(
                 f"Mauvaise réponse. L'équation admet une unique solution : x = {convert_to_fraction(solution_1)}\n"
             )
-            # print_red(
-            #     f"Mauvaise réponse. L'équation admet une unique solution : x = {convert_to_fraction(-b / (2 * a))}\n"
-            # )
     else:
         expected_num_solutions = "2"
         if num_solutions == expected_num_solutions:
             points += point_gagne
             print_green(f"Bonne réponse, tu as obtenu {point_gagne}pt !\n")
 
-            # # Calcul des solutions
-            # solution_1 = (-b - delta**0.5) / (2 * a)
-            # solution_2 = (-b + delta**0.5) / (2 * a)
-
             # Demander les solutions à l'utilisateur
             print(
                 f"Donnez les solutions de l'équation (sous forme de fraction) : ({2*point_gagne}pt)"
             )
+            # TODO : donner quand même un point si bon
             user_solution_1 = input(f"La solution 1 est ({point_gagne}pt) \n")
             user_solution_2 = input(f"La solution 2 est ({point_gagne}pt) \n")
             print()
@@ -170,8 +151,6 @@ def equation_second_degre():
             print_red("Les solutions sont :")
             print_red(f"x1 = {convert_to_fraction(solution_1)}")
             print_red(f"x2 = {convert_to_fraction(solution_2)}")
-            # print_red(f"x1 = {convert_to_fraction((-b - delta**0.5) / (2 * a))}")
-            # print_red(f"x2 = {convert_to_fraction((-b + delta**0.5) / (2 * a))}")
 
     return points
 
