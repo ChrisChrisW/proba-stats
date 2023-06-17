@@ -72,6 +72,8 @@ def generate_equation_second_degre():
 
             # p appartient a E+
             p = format_fraction(choose_parameter_positive_only())
+            # l appartient a E = {−3, −2, −1, 1, 2, 3}
+            l = format_fraction(random.choice([-3, -2, -1, 1, 2, 3]))
 
             x1 = format_fraction((-h - e * (p**0.5)) / l)
             x2 = format_fraction((-h - e * (p**0.5)) / l)
@@ -92,8 +94,9 @@ def generate_equation_second_degre():
         if afficher_tous_infos_terminal:
             print_blue("delta = 0")
 
-        # probabilité X=1 et Z!=1 mais il ne peux pas être égal à 0 non plus
+        # e² = 0 = delta, c'est pourquoi on doit générer un nouveau e positive strict
         e = format_fraction(random.choice(A))
+        # probabilité X=1 | X=[4,9] | X = [2, 3, 5, 6, 7, 8]
         X = random.choices(
             [1, random.choice([4, 9]), random.choice([2, 3, 5, 6, 7, 8])],
             weights=[p_X_egal_1, p_X_different_4_9, p_X_different_autres],
@@ -118,6 +121,9 @@ def generate_equation_second_degre():
     if afficher_tous_infos_terminal:
         print_blue("delta < 0")
 
+    # e² = (chiffre négatif) -> ex : (e² = -1) est une contradiction, un carré ne peut pas être négatif
+    # e² = delta < 0 , c'est pourquoi on doit générer un nouveau e positive strict
+    # e appartient a E = {1, 2, 3}
     e = format_fraction(random.choice([1, 2, 3]))
 
     # il faut que a appartient a E exclue 0 pour éviter un problème de calcul sur c
