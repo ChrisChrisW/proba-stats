@@ -6,13 +6,10 @@ from utils.printer import *
 from utils.constant import *
 from utils.parameters import *
 from utils.maths_func import (
-    multiply_fraction_by_denominator_for_a_b_c,
     format_fraction,
     convert_to_fraction,
 )
-
-# TODO : afficher ou non toutes les données de l'équation avant la correction
-afficher_coeff = True
+from src.generator_equation_second_degre import generate_equation_second_degre
 
 
 def equation_second_degre():
@@ -31,7 +28,7 @@ def equation_second_degre():
     if len(result) == 6:
         a, b, c, delta, solution_1, solution_2 = result
     elif len(result) == 5:
-        a, b, c, delta, solution_1 = result
+        a, b, c, delta, solution = result
     elif len(result) == 4:
         a, b, c, delta = result
 
@@ -62,7 +59,7 @@ def equation_second_degre():
             print_red("L'équation n'admet pas de solution.")
         elif delta == 0:
             print_red(
-                f"L'équation admet une unique solution : x = {convert_to_fraction(solution_1)}"
+                f"L'équation admet une unique solution : x = {convert_to_fraction(solution)}"
             )
         else:
             print_red("L'équation admet deux solutions :")
@@ -106,18 +103,18 @@ def equation_second_degre():
             print()
 
             # Vérifier la solution fournie par l'utilisateur
-            if user_solution == convert_to_fraction(solution_1):
+            if user_solution == convert_to_fraction(solution):
                 points += point_gagne
                 print_green(
-                    f"Bonne réponse ! Tu as obtenu {point_gagne}pt, l'équation admet une unique solution : x = {convert_to_fraction(solution_1)}\n"
+                    f"Bonne réponse ! Tu as obtenu {point_gagne}pt, l'équation admet une unique solution : x = {convert_to_fraction(solution)}\n"
                 )
             else:
                 print_red(
-                    f"Mauvaise réponse. La solution est : x = {convert_to_fraction(solution_1)}"
+                    f"Mauvaise réponse. La solution est : x = {convert_to_fraction(solution)}"
                 )
         else:
             print_red(
-                f"Mauvaise réponse. L'équation admet une unique solution : x = {convert_to_fraction(solution_1)}\n"
+                f"Mauvaise réponse. L'équation admet une unique solution : x = {convert_to_fraction(solution)}\n"
             )
     else:
         expected_num_solutions = "2"
@@ -137,6 +134,7 @@ def equation_second_degre():
             if (user_solution_1 == convert_to_fraction(solution_1)) or (
                 user_solution_1 == convert_to_fraction(solution_2)
             ):
+                points += point_gagne
                 print_green(f"Bonne réponse ! Tu as obtenu le premier {point_gagne}pt")
 
                 user_solution_2 = input(f"La solution 2 est ({point_gagne}pt) \n")
@@ -145,6 +143,7 @@ def equation_second_degre():
                     (user_solution_2 == convert_to_fraction(solution_1))
                     or (user_solution_2 == convert_to_fraction(solution_2))
                 ):
+                    points += point_gagne
                     print_green(
                         f"Bonne réponse ! Tu as obtenu {point_gagne}pt, l'équation admet deux solutions :"
                     )
@@ -350,119 +349,6 @@ def integration():
         print_red("Choix invalide.")
 
     return points
-
-
-def generate_equation_second_degre():
-    # delta choisit avec une certaine probabilité
-    # type 1 : delta < 0
-    # type 2 : delta = 0
-    # type 3 : delta > 0
-    delta = random.choices(
-        [choose_parameter_negative_only(), 0, choose_parameter_positive_only()],
-        weights=[p_type_1, p_type_2, p_type_3],
-    )[0]
-
-    # par default
-    e = delta**0.5
-    a = 1
-
-    if delta > 0:
-        if afficher_coeff:
-            print_blue("delta > 0")
-
-        cas_choice = random.choices(
-            ["3.1", "3.2"], weights=[p_equation_delta_sup_3_1, p_equation_delta_sup_3_2]
-        )[0]
-
-        h = format_fraction(random.choice(A))
-        # probabilité Z=1 et Z!=1 mais il ne peux pas être égal à 0 non plus
-        Z = random.choices(
-            [1, choose_parameter_excluding([0, 1])],
-            weights=[p_Z_egal_1, p_Z_different_1],
-        )[0]
-        l = format_fraction(Z)
-
-        if cas_choice == "3.1":
-            if afficher_coeff:
-                print_blue("x1=h/l , x2=k/l")
-
-            k = format_fraction(random.choice(A))
-
-            x1 = Fraction(h / l)
-            x2 = Fraction(k / l)
-
-            b = -Fraction(x1 + x2)
-            c = Fraction(x1 * x2)
-
-        elif cas_choice == "3.2":
-            if afficher_coeff:
-                print_blue("x1=(-h - e*sqrt(p))/l , x2=(-h + e*sqrt(p))/l")
-
-            # p appartient a E+
-            p = format_fraction(choose_parameter_positive_only())
-
-            x1 = format_fraction((-h - e * (p**0.5)) / l)
-            x2 = format_fraction((-h - e * (p**0.5)) / l)
-
-            a = format_fraction(l / 2)
-            b = h
-            c = format_fraction(((h**2) - p * (e**2)) / l)
-
-        if afficher_coeff:
-            # variables de tempo pour afficher les variables sous forme d'entier dans la console
-            tmp_a, tmp_b, tmp_c = multiply_fraction_by_denominator_for_a_b_c(a, b, c)
-            print_green(
-                f"Pour un delta > 0, delta={delta} et (x1, x2)=({x1},{x2}), on a une equation {format_coefficient_for_a(tmp_a)} {format_coefficient_b_or_c(tmp_b, 'x')} {format_coefficient_b_or_c(tmp_c, '')} avec a={a}, b={b} et c={c}"
-            )
-
-        return a, b, c, delta, x1, x2
-    elif delta == 0:
-        if afficher_coeff:
-            print_blue("delta = 0")
-
-        # probabilité X=1 et Z!=1 mais il ne peux pas être égal à 0 non plus
-        e = format_fraction(random.choice(A))
-        X = random.choices(
-            [1, random.choice([4, 9]), random.choice([2, 3, 5, 6, 7, 8])],
-            weights=[p_X_egal_1, p_X_different_4_9, p_X_different_autres],
-        )[0]
-        l = format_fraction(X)
-
-        x0 = e / (l**0.5)
-
-        a = 1
-        b = -2 * x0
-        c = a * (x0**2)
-
-        if afficher_coeff:
-            # variables de tempo pour afficher les variables sous forme d'entier dans la console
-            _, tmp_b, tmp_c = multiply_fraction_by_denominator_for_a_b_c(a, b, c)
-            print_green(
-                f"Pour un delta = 0, delta={delta} et x0={x0}, on a une equation {format_coefficient_for_a(a)} {format_coefficient_b_or_c(tmp_b, 'x')} {format_coefficient_b_or_c(tmp_c, '')} avec a={a}, b={b} et c={c}"
-            )
-
-        return a, b, c, delta, x0
-
-    if afficher_coeff:
-        print_blue("delta < 0")
-
-    e = format_fraction(random.choice([1, 2, 3]))
-
-    # il faut que a appartient a E exclue 0 pour éviter un problème de calcul sur c
-    a = format_fraction(choose_parameter_excluding(0))
-    b = format_fraction(random.choice(A))
-
-    c = ((b**2) + e) / (4 * a)
-
-    if afficher_coeff:
-        # variables de tempo pour afficher les variables sous forme d'entier dans la console
-        tmp_a, tmp_b, tmp_c = multiply_fraction_by_denominator_for_a_b_c(a, b, c)
-
-        print_green(
-            f"Pour un delta < 0, delta={delta}, on a une equation {format_coefficient_for_a(tmp_a)} {format_coefficient_b_or_c(tmp_b, 'x')} {format_coefficient_b_or_c(tmp_c, '')} avec a={a}, b={b} et c={c}"
-        )
-
-    return a, b, c, delta
 
 
 def main():

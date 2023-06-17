@@ -1,6 +1,9 @@
 import numpy as np
 from utils.maths_func import repartition_valeurs
 
+# TODO : Afficher ou non toutes les données de l'équation avant la correction
+afficher_tous_infos_terminal = True
+
 # A = −9 : 1 : 9 = {−9, . . . , −1, 0, 1, . . . , 9}.
 A = np.arange(-9, 9, 1).tolist()
 
