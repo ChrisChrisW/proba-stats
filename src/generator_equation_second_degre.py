@@ -4,8 +4,9 @@ from utils.printer import *
 from utils.constant import *
 from utils.parameters import *
 from utils.maths_func import (
-    multiply_fraction_by_denominator_for_a_b_c,
     format_fraction,
+    process_coefficients_with_multiplier,
+    process_coefficients
 )
 
 
@@ -78,13 +79,13 @@ def generate_equation_second_degre():
             x1 = format_fraction((-h - e * (p**0.5)) / l)
             x2 = format_fraction((-h - e * (p**0.5)) / l)
 
-            a = format_fraction(l / 2)
-            b = h
-            c = format_fraction(((h**2) - p * (e**2)) / l)
+            b = format_fraction((2*h) / l)
+            c = format_fraction(((h**2) - p * (e**2)) / (l**2))
 
         if afficher_tous_infos_terminal:
             # variables de tempo pour afficher les variables sous forme d'entier dans la console
-            tmp_a, tmp_b, tmp_c = multiply_fraction_by_denominator_for_a_b_c(a, b, c)
+            tmp_a, tmp_b, tmp_c = a, b, c
+            tmp_a, tmp_b, tmp_c = process_coefficients_with_multiplier(tmp_a, tmp_b, tmp_c, l**2)
             print_green(
                 f"Pour un delta > 0, delta={delta} et (x1, x2)=({x1},{x2}), on a une equation {format_coefficient_for_a(tmp_a)} {format_coefficient_b_or_c(tmp_b, 'x')} {format_coefficient_b_or_c(tmp_c, '')} avec a={a}, b={b} et c={c}"
             )
@@ -111,9 +112,11 @@ def generate_equation_second_degre():
 
         if afficher_tous_infos_terminal:
             # variables de tempo pour afficher les variables sous forme d'entier dans la console
-            _, tmp_b, tmp_c = multiply_fraction_by_denominator_for_a_b_c(a, b, c)
+            tmp_a, tmp_b, tmp_c = a, b, c
+            tmp_a, tmp_b, tmp_c = process_coefficients_with_multiplier(tmp_a, tmp_b, tmp_c, l)
+            tmp_a, tmp_b, tmp_c = process_coefficients_with_multiplier(tmp_a, tmp_b, tmp_c, l**0.5)
             print_green(
-                f"Pour un delta = 0, delta={delta} et x0={x0}, on a une equation {format_coefficient_for_a(a)} {format_coefficient_b_or_c(tmp_b, 'x')} {format_coefficient_b_or_c(tmp_c, '')} avec a={a}, b={b} et c={c}"
+                f"Pour un delta = 0, delta={delta} et x0={x0}, on a une equation {format_coefficient_for_a(tmp_a)} {format_coefficient_b_or_c(tmp_b, 'x')} {format_coefficient_b_or_c(tmp_c, '')} avec a={a}, b={b} et c={c}"
             )
 
         return a, b, c, delta, x0
@@ -134,7 +137,8 @@ def generate_equation_second_degre():
 
     if afficher_tous_infos_terminal:
         # variables de tempo pour afficher les variables sous forme d'entier dans la console
-        tmp_a, tmp_b, tmp_c = multiply_fraction_by_denominator_for_a_b_c(a, b, c)
+        tmp_a, tmp_b, tmp_c = a, b, c
+        tmp_a, tmp_b, tmp_c = process_coefficients(tmp_a, tmp_b, tmp_c)
 
         print_green(
             f"Pour un delta < 0, delta={delta}, on a une equation {format_coefficient_for_a(tmp_a)} {format_coefficient_b_or_c(tmp_b, 'x')} {format_coefficient_b_or_c(tmp_c, '')} avec a={a}, b={b} et c={c}"

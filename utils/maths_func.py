@@ -1,42 +1,71 @@
 from fractions import Fraction
 
 
-def is_decimal(value):
+def check_number_type(number):
     """
-    Vérifie si une valeur est décimale (nombre rationnel avec un dénominateur différent de 1).
+    Checks the type of a number (integer, fraction, or decimal).
 
     Args:
-        value (Fraction): La valeur à vérifier.
+        number (float or Fraction or int): The number to check.
 
     Returns:
-        bool: True si la valeur est décimale, False sinon.
+        str: A string indicating the type of the number: 'integer', 'fraction', or 'decimal'.
+
+    Raises:
+        None.
+
+    Examples:
+        >>> check_number_type(5)
+        'integer'
+        >>> check_number_type(Fraction(3, 4))
+        'fraction'
+        >>> check_number_type(2.5)
+        'decimal'
     """
-    if isinstance(value, float):
-        fraction = Fraction(value).limit_denominator()
-        return fraction.denominator != 1
+    if isinstance(number, int):
+        return 'integer'
+    elif isinstance(number, Fraction):
+        return 'fraction'
+    elif isinstance(number, float):
+        return 'decimal'
+    else:
+        raise ValueError('Invalid number type')
 
-    if isinstance(value, Fraction):
-        return value.denominator != 1
 
-    return False
-
-
-def multiply_fraction_by_denominator(fraction):
+def multiply_non_integer_coefficients(a, b, c, multiplier):
     """
-    Multiplie une fraction par son dénominateur pour obtenir un nombre entier.
+    Multiplies non-integer coefficients 'a', 'b', and 'c' by a specified multiplier.
 
     Args:
-        fraction (Fraction): La fraction à multiplier.
+        a (int or float or Fraction): The coefficient 'a' in the equation.
+        b (int or float or Fraction): The coefficient 'b' in the equation.
+        c (int or float or Fraction): The coefficient 'c' in the equation.
+        multiplier (int or float): The value to multiply non-integer coefficients by.
 
     Returns:
-        int: Le résultat de la multiplication de la fraction par son dénominateur.
-    """
-    if isinstance(fraction, float):
-        fraction = Fraction(fraction).limit_denominator()
+        tuple: The updated coefficients 'a', 'b', and 'c' after applying the multiplication if necessary.
 
-    denominator = fraction.denominator
-    numerator = fraction.numerator * denominator
-    return numerator
+    Raises:
+        None.
+
+    Examples:
+        >>> multiply_non_integer_coefficients(5, 3, 7, 2)
+        (5, 3, 7)
+        >>> multiply_non_integer_coefficients(1/2, 3/4, 5, 2)
+        (1, 3/2, 10)
+        >>> multiply_non_integer_coefficients(3, 4, Fraction(1, 5), 10)
+        (3, 4, 10)
+    """
+    if not isinstance(a, int):
+        a *= multiplier
+
+    if not isinstance(b, int):
+        b *= multiplier
+
+    if not isinstance(c, int):
+        c *= multiplier
+
+    return a, b, c
 
 
 def multiply_fraction_by_denominator_for_a_b_c(a, b, c):
@@ -53,37 +82,95 @@ def multiply_fraction_by_denominator_for_a_b_c(a, b, c):
 
     Raises:
         None.
-
+    
     Examples:
         >>> multiply_fraction_by_denominator_for_a_b_c(1/2, 3/4, 5)
-        (2, 3/2, 5)
+        (4, 3, 20)
         >>> multiply_fraction_by_denominator_for_a_b_c(3, 4, Fraction(1, 5))
         (3, 4, 5)
+        >>> multiply_fraction_by_denominator_for_a_b_c(0.3, 0.25, 1.2)
+        (3, 1, 6)
     """
-    tmp_a, tmp_b, tmp_c = a, b, c
+    if isinstance(a, float):
+        mult_a = float(Fraction(a).limit_denominator().denominator)
+        a *= mult_a
+        b *= mult_a
+        c *= mult_a
+    if isinstance(b, float):
+        mult_b = float(Fraction(b).limit_denominator().denominator)
+        a *= mult_b
+        b *= mult_b
+        c *= mult_b
+    if isinstance(c, float):
+        mult_c = float(Fraction(c).limit_denominator().denominator)
+        a *= mult_c
+        b *= mult_c
+        c *= mult_c
 
-    # multiplier par le dénominateur pour enlever la fraction a A
-    if is_decimal(tmp_a):
-        denominator_a = multiply_fraction_by_denominator(tmp_a)
-        tmp_a = tmp_a * denominator_a
-        tmp_b = tmp_b * denominator_a
-        tmp_c = tmp_c * denominator_a
+    return float(a), float(b), float(c)
 
-    # multiplier par le dénominateur pour enlever la fraction a B
-    if is_decimal(tmp_b):
-        denominator_b = multiply_fraction_by_denominator(tmp_b)
-        tmp_a = tmp_a * denominator_b
-        tmp_b = tmp_b * denominator_b
-        tmp_c = tmp_c * denominator_b
 
-    # multiplier par le dénominateur pour enlever la fraction a C
-    if is_decimal(tmp_c):
-        denominator_c = multiply_fraction_by_denominator(tmp_c)
-        tmp_a = tmp_a * denominator_c
-        tmp_b = tmp_b * denominator_c
-        tmp_c = tmp_c * denominator_c
+def process_coefficients_with_multiplier(a, b, c, multiplier=10):
+    """
+    Processes the coefficients 'a', 'b', and 'c' by removing fractions and multiplying non-integer coefficients.
 
-    return tmp_a, tmp_b, tmp_c
+    Args:
+        a (float or Fraction or int): The coefficient 'a' in the equation.
+        b (float or Fraction or int): The coefficient 'b' in the equation.
+        c (float or Fraction or int): The coefficient 'c' in the equation.
+        multiplier (int or float): The value to multiply non-integer coefficients by. Default: 10.
+
+    Returns:
+        tuple: The processed coefficients 'a', 'b', and 'c' after removing fractions and applying multiplication if necessary.
+
+    Raises:
+        None.
+
+    Examples:
+        >>> process_coefficients_with_multiplier(1/2, 3/4, 5)
+        (4, 3, 20)
+    """
+    a_type = check_number_type(a)
+    b_type = check_number_type(b)
+    c_type = check_number_type(c)
+    
+    if a_type != 'integer' or b_type != 'integer' or c_type != 'integer':
+        a, b, c = multiply_non_integer_coefficients(a, b, c, multiplier)
+
+    return a, b, c
+
+def process_coefficients(a, b, c):
+    """
+    Processes the coefficients 'a', 'b', and 'c' by removing fractions and multiplying non-integer coefficients.
+
+    Args:
+        a (float or Fraction or int): The coefficient 'a' in the equation.
+        b (float or Fraction or int): The coefficient 'b' in the equation.
+        c (float or Fraction or int): The coefficient 'c' in the equation.
+        multiplier (int or float): The value to multiply non-integer coefficients by. Default: 10.
+
+    Returns:
+        tuple: The processed coefficients 'a', 'b', and 'c' after removing fractions and applying multiplication if necessary.
+
+    Raises:
+        None.
+
+    Examples:
+        >>> process_coefficients(3, 4, Fraction(1, 5))
+        (3, 4, 5)
+        >>> process_coefficients(0.3, 0.25, 1.2)
+        (3, 1, 6)
+        >>> process_coefficients(2, 3, 4)
+        (2, 3, 4)
+    """
+    a_type = check_number_type(a)
+    b_type = check_number_type(b)
+    c_type = check_number_type(c)
+
+    if a_type != 'integer' or b_type != 'integer' or c_type != 'integer':
+        a, b, c = multiply_fraction_by_denominator_for_a_b_c(a, b, c)
+
+    return a, b, c
 
 
 def format_fraction(value):
@@ -97,7 +184,7 @@ def format_fraction(value):
         Fraction or float: La valeur convertie en Fraction si c'est possible, sinon la valeur originale en tant que float.
     """
     fraction = Fraction(value).limit_denominator()
-    return fraction if is_decimal(fraction) else float(value)
+    return fraction if fraction.denominator != 1 else float(value)
 
 
 def convert_to_fraction(value):

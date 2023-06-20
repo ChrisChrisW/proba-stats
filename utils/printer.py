@@ -145,4 +145,7 @@ def format_coefficient_b_or_c(coefficient, string_x_polynom):
         else:
             value = "- " + str(abs(coefficient))
 
+    if isinstance(value, str) and not value:
+        return value
+    
     return value + string_x_polynom
