@@ -1,5 +1,14 @@
 # Présentation
 
+## Auteurs
+- Christophe Wang
+- Pierre Laurent
+- Zakaria Mellah
+
+## Ce qui a été fait
+Tout a été fait sauf le chronomètre sur la partie `probability_terminal.py` donc l'interface textuelle. 
+Le chronomètre fonctionne pour la partie interface graphique mais la boîte de dialogue ne disparaît pas lorsque le temps est écoulé. 
+La valeur de la réponse contenue dans la boîte de dialogue est soit nulle (si rien n'y a été écrit) soit la valeur saisie avant que le temps ne soit écoulé.
 ## Installation
 ```bash
     pip install -r requirements.txt
