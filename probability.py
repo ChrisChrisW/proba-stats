@@ -1,5 +1,4 @@
-import tkinter as tk
-from tkinter import messagebox, simpledialog
+from tkinter import simpledialog, messagebox, Tk, Label, Frame, Entry, Button
 import random
 import math
 from fractions import Fraction
@@ -9,10 +8,10 @@ from utils.constant import *
 from utils.parameters import *
 from utils.maths_func import (
     format_fraction,
-    convert_to_fraction,
+    convert_to_fraction
 )
 from src.generator_equation_second_degre import generate_equation_second_degre
-
+from src.ask_question_with_timer import ask_question_with_timer
 
 def equation_second_degre():
     """
@@ -27,7 +26,9 @@ def equation_second_degre():
 
     # Générer l'équation du 2nd degré
     result = generate_equation_second_degre()
-
+    # Convertir toutes les valeurs
+    result = [format_fraction(r) for r in result]
+    
     if len(result) == 6:
         a, b, c, delta, solution_1, solution_2 = result
     elif len(result) == 5:
@@ -35,14 +36,13 @@ def equation_second_degre():
     elif len(result) == 4:
         a, b, c, delta = result
 
-    # Demande à l'utilisateur de calculer le discriminant
-    user_delta = simpledialog.askstring(
+    user_delta = ask_question_with_timer(
         "Équation du second degré",
-        f"Résolvez l'équation : {a}x^2 + {b}x + {c} = 0\nQue vaut le discriminant (delta) de l'équation ? ({point_gagne}pt)",
+        f"Résolvez l'équation : {a}x^2 + {b}x + {c} = 0\nQue vaut le discriminant (delta) de l'équation ? ({point_gagne}pt)"
     )
-
+    
     try:
-        user_delta = Fraction(user_delta)
+        user_delta = format_fraction(user_delta)
     except ValueError:
         user_delta = None
 
@@ -74,10 +74,16 @@ def equation_second_degre():
     messagebox.showinfo("Bonne réponse", f"Tu as obtenu {point_gagne}pt !")
 
     # Interaction avec le client pour le nombre de solutions
-    num_solutions = simpledialog.askstring(
+    num_solutions = ask_question_with_timer(
         "Question",
         f"L'équation : {a}x^2 + {b}x + {c} = 0\nLe discriminant (delta) est : {delta}\nQuel est le nombre de solutions de l'équation ? ({point_gagne}pt)",
+        20
     )
+    # Convertir le str en fraction ou float
+    num_solutions = format_fraction(num_solutions)
+    
+    # au cas où un utilisateur s'amuse à mettre autre chose que 0, 1 ou 2
+    num_solutions = num_solutions if num_solutions in {0, 1, 2} else -1
 
     # Cas exceptionnel, où il n'y a pas de solution
     if delta >= 0 and a == 0:
@@ -85,8 +91,7 @@ def equation_second_degre():
 
     # Vérification du nombre de solutions
     if delta < 0:
-        expected_num_solutions = "0"
-        if num_solutions == expected_num_solutions:
+        if num_solutions == 0:
             points += point_gagne
             messagebox.showinfo(
                 "Bonne réponse !",
@@ -98,19 +103,21 @@ def equation_second_degre():
                 "L'équation n'admet pas de solution.",
             )
     elif delta == 0:
-        expected_num_solutions = "1"
-        if num_solutions == expected_num_solutions:
+        if num_solutions == 1:
             points += point_gagne
             messagebox.showinfo("Bonne réponse", f"Tu as obtenu {point_gagne}pt !")
 
             # Demander la solution si l'équation admet une unique solution
-            user_solution = simpledialog.askstring(
+            user_solution = ask_question_with_timer(
                 "Question",
                 f"L'équation : {a}x^2 + {b}x + {c} = 0\nLe discriminant (delta) est : {delta}\nQuelle est la solution de l'équation (sous forme de fraction de préférence) ? ({point_gagne}pt)",
             )
-
+            
+            # conversion pour avoir la valeur brute
+            user_solution = format_fraction(user_solution)
+            
             # Vérifier la solution fournie par l'utilisateur
-            if user_solution == convert_to_fraction(solution):
+            if user_solution == solution:
                 points += point_gagne
                 messagebox.showinfo(
                     "Bonne réponse",
@@ -127,36 +134,35 @@ def equation_second_degre():
                 f"Mauvaise réponse. L'équation admet une unique solution : x = {convert_to_fraction(-b / (2 * a))}",
             )
     else:
-        expected_num_solutions = "2"
-        if num_solutions == expected_num_solutions:
+        if num_solutions == 2:
             points += point_gagne
-
-            # Calcul des solutions
-            solution_1 = (-b - delta**0.5) / (2 * a)
-            solution_2 = (-b + delta**0.5) / (2 * a)
 
             messagebox.showinfo("Bonne réponse", f"Tu as obtenu {point_gagne}pt !")
 
             # Demander les solutions à l'utilisateur
-            user_solution_1 = simpledialog.askstring(
+            user_solution_1 = ask_question_with_timer(
                 "Question",
                 f"L'équation : {a}x^2 + {b}x + {c} = 0\nLe discriminant (delta) est : {delta}\nDonnez la solution 1 de l'équation (sous forme de fraction) qui est :",
             )
-            user_solution_2 = simpledialog.askstring(
+            user_solution_2 = ask_question_with_timer(
                 "Question",
                 f"L'équation : {a}x^2 + {b}x + {c} = 0\nLe discriminant (delta) est : {delta}\nTon x1={user_solution_1}\nDonnez la solution 2 de l'équation (sous forme de fraction) qui est :",
             )
+            
+            # conversion pour avoir les valeurs brutes
+            user_solution_1 = format_fraction(user_solution_1)
+            user_solution_2 = format_fraction(user_solution_2)
 
             # Vérifier les solutions fournies par l'utilisateur
             if (
                 user_solution_1 != user_solution_2
                 and (
-                    user_solution_1 == convert_to_fraction(solution_1)
-                    and user_solution_2 == convert_to_fraction(solution_2)
+                    user_solution_1 == format_fraction(solution_1)
+                    and user_solution_2 == format_fraction(solution_2)
                 )
                 or (
-                    user_solution_1 == convert_to_fraction(solution_2)
-                    and user_solution_2 == convert_to_fraction(solution_1)
+                    user_solution_1 == format_fraction(solution_2)
+                    and user_solution_2 == format_fraction(solution_1)
                 )
             ):
                 points += 2 * point_gagne
@@ -424,17 +430,17 @@ def generate_questions():
 
 
 # Création de la fenêtre principale
-window = tk.Tk()
+window = Tk()
 window.title("Générateur de questions")
 window.geometry("300x200")
 
 # Création d'un cadre pour contenir le texte et le bouton
-frame = tk.Frame(window)
+frame = Frame(window)
 
 # Création des widgets
-question_count_label = tk.Label(frame, text="Nombre de questions :")
-question_count_entry = tk.Entry(frame)
-generate_button = tk.Button(
+question_count_label = Label(frame, text="Nombre de questions :")
+question_count_entry = Entry(frame)
+generate_button = Button(
     frame, text="Générer les questions", command=generate_questions
 )
 

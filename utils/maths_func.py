@@ -183,8 +183,11 @@ def format_fraction(value):
     Returns:
         Fraction or float: La valeur convertie en Fraction si c'est possible, sinon la valeur originale en tant que float.
     """
-    fraction = Fraction(value).limit_denominator()
-    return fraction if fraction.denominator != 1 else float(value)
+    try:
+        fraction = Fraction(str(value)).limit_denominator()
+        return fraction if fraction.denominator != 1 else float(value)
+    except ValueError:
+        return value
 
 
 def convert_to_fraction(value):
