@@ -1,3 +1,15 @@
+# Présentation
+
+## Installation
+```bash
+    pip install -r requirements.txt
+```
+## Interface textuelle via terminal
+Pour cela, lancer le fichier `probability_terminal.py`
+
+## Interface graphique
+Pour cela, lancer le fichier `probability.py`
+
 # Import Statements
 
 ```python
