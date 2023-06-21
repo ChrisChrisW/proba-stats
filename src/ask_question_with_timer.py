@@ -1,4 +1,5 @@
 from tkinter import simpledialog, messagebox, Tk, Label, Frame
+import sympy
 
 def ask_question_with_timer(title, prompt, time_limit = 120):
     """
@@ -58,8 +59,13 @@ def ask_question_with_timer(title, prompt, time_limit = 120):
     update_time()
 
     # Demande de saisie à l'utilisateur
-    response = simpledialog.askstring(title, prompt)
-    
+    user_input = simpledialog.askstring(title, prompt)
+    try:
+        # Évalue numériquement l'expression mathématique
+        response = sympy.N(sympy.sympify(user_input))
+    except:
+        response = user_input
+
     # Indiquer la fin de l'épreuve
     end_test = True
     

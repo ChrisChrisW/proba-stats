@@ -78,7 +78,7 @@ def format_coefficient_for_a(a):
     return value + "x²"
 
 
-def format_coefficient_b_or_c(coefficient, string_x_polynom):
+def format_coefficient_b_or_c(coefficient, string_x_polynom = ''):
     """
     Formats the coefficient 'coefficient' for the linear or constant term in an equation.
 

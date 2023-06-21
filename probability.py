@@ -38,13 +38,15 @@ def equation_second_degre():
 
     user_delta = ask_question_with_timer(
         "Équation du second degré",
-        f"Résolvez l'équation : {a}x^2 + {b}x + {c} = 0\nQue vaut le discriminant (delta) de l'équation ? ({point_gagne}pt)"
+        f"Résolvez l'équation : {format_coefficient_for_a(a)} {format_coefficient_b_or_c(b, 'x')} {format_coefficient_b_or_c(c)} = 0\nQue vaut le discriminant (delta) de l'équation ? ({point_gagne}pt)"
     )
     
     try:
         user_delta = format_fraction(user_delta)
     except ValueError:
         user_delta = None
+        
+    print(user_delta)
 
     if user_delta is None or user_delta != delta:
         # Cas exceptionnel, où il n'y a pas de solution
