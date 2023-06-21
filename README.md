@@ -15,7 +15,16 @@ La valeur de la réponse contenue dans la boîte de dialogue est soit nulle (si 
 ```
 ## Interface textuelle via terminal
 Pour cela, lancer le fichier `probability_terminal.py`
-> il n'y a pas de chronomètre dans ce code
+> Il n'y a pas de chronomètre dans ce code
+
+Si vous souhaitez voir les réponses (affichées en vert dans le terminal), changez la ligne dans `utils/constant.py` de:
+```
+afficher_tous_infos_terminal = False 
+```
+à 
+```
+afficher_tous_infos_terminal = True 
+```
 
 ## Interface graphique
 Pour cela, lancer le fichier `probability.py`
