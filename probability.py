@@ -45,8 +45,6 @@ def equation_second_degre():
         user_delta = format_fraction(user_delta)
     except ValueError:
         user_delta = None
-        
-    print(user_delta)
 
     if user_delta is None or user_delta != delta:
         # Cas exceptionnel, où il n'y a pas de solution
